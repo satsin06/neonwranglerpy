@@ -10,3 +10,4 @@ yapf
 sphinx-press-theme
 laspy
 lazrs
+opencv-python
