@@ -13,3 +13,4 @@ lazrs
 opencv-python
 numpy
 rasterio
+deepforest
