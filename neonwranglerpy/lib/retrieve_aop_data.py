@@ -21,8 +21,7 @@ def retrieve_aop_data(data, year=2019, dpID=['DP3.30006.001'], savepath=""):
     savepath : str
         The full path to the folder in which the files would be placed locally.
     """
-    coords_for_tiles = data[[
-        'plotID', 'siteID', 'utmZone', 'easting', 'northing']]
+    coords_for_tiles = data[['plotID', 'siteID', 'utmZone', 'easting', 'northing']]
     # get tiles dimensions
     coords_for_tiles['easting'] = (coords_for_tiles[['easting']] /
                                    1000).astype(int) * 1000
@@ -33,8 +32,7 @@ def retrieve_aop_data(data, year=2019, dpID=['DP3.30006.001'], savepath=""):
     if coords_for_tiles.easting.shape[0] > 1:
         # drop duplicates values
         tiles = coords_for_tiles.drop_duplicates(
-            subset=['siteID', 'utmZone', 'easting', 'northing']).reset_index(
-                drop=True)
+            subset=['siteID', 'utmZone', 'easting', 'northing']).reset_index(drop=True)
         tiles.dropna(axis=0, how='any', inplace=True)
 
         # convert CHEQ into STEI

@@ -13,7 +13,8 @@ from neonwranglerpy.lib.retrieve_aop_data import retrieve_aop_data
 
 def extract_training_data(vst_data,
                           geo_data_frame,
-                          year, dpID='DP3.30010.001',
+                          year,
+                          dpID='DP3.30010.001',
                           savepath='/content',
                           site='DELA'):
     """
@@ -37,13 +38,12 @@ def extract_training_data(vst_data,
     geo_data_frame = gpd.GeoDataFrame(vst_data, geometry=geometry, crs=epsg_codes.iloc[0])
 
     extract_training_data(vst_data=vst_data, geo_data_frame=geo_data_frame, year='2018',
-    dpID='DP3.30010.001',
-                    savepath='/content', site='DELA')
+    dpID='DP3.30010.001', savepath='/content', site='DELA')
     """
     retrieve_aop_data(vst_data, year, dpID, savepath)
     site_level_data = vst_data[vst_data.plotID.str.contains(site)]
-    get_tiles = ((site_level_data.easting/1000).astype(int) * 1000).astype(str) + "_"
-    + ((site_level_data.northing/1000).astype(int) * 1000).astype(str)
+    get_tiles = ((site_level_data.easting / 1000).astype(int) * 1000).astype(str) + "_"
+    +((site_level_data.northing / 1000).astype(int) * 1000).astype(str)
     print("get_tiles")
     print(get_tiles.unique())
 
@@ -86,31 +86,27 @@ def extract_training_data(vst_data,
                         easting = row.easting
                         northing = row.northing
 
-                        x_min = int(affine[2] + 10/affine[0] - easting)
-                        y_min = int(affine[5] + 10/affine[0] - northing)
-                        x_max = int(affine[2] - 10/affine[0] - easting)
-                        y_max = int(affine[5] - 10/affine[0] - northing)
+                        x_min = int(affine[2] + 10 / affine[0] - easting)
+                        y_min = int(affine[5] + 10 / affine[0] - northing)
+                        x_max = int(affine[2] - 10 / affine[0] - easting)
+                        y_max = int(affine[5] - 10 / affine[0] - northing)
 
                         file_name = f"section_{x_min}_{y_min}_{x_max}_{y_max}.tif"
 
-                        section_file = os.path.join(output_folder,
-                                                    file_name)
+                        section_file = os.path.join(output_folder, file_name)
 
                         if section_file not in section_files:
                             section = image[y_max:y_min, x_max:x_min, :]
                             print("Section shape:", section.shape)
 
                             section_meta = src.meta.copy()
-                            section_meta['width'] = (affine[2] + x_min) - (affine[2]
-                                                                           + x_max)
-                            section_meta['height'] = (affine[5] + y_min) - (affine[5]
-                                                                            + y_max)
-                            section_meta['transform'] = rasterio.Affine(affine[0],
-                                                                        0, (affine[2] -
-                                                                            x_min), 0,
-                                                                        affine[4],
-                                                                        (affine[5] -
-                                                                            y_min))
+                            section_meta['width'] = (affine[2] + x_min) - (affine[2] +
+                                                                           x_max)
+                            section_meta['height'] = (affine[5] + y_min) - (affine[5] +
+                                                                            y_max)
+                            section_meta['transform'] = rasterio.Affine(
+                                affine[0], 0, (affine[2] - x_min), 0, affine[4],
+                                (affine[5] - y_min))
 
                             section_np = np.moveaxis(section, -1, 0)
 
@@ -127,9 +123,10 @@ def extract_training_data(vst_data,
 
                         prediction = model.predict_image(path=section_file)
 
-                        gdf = utilities.boxes_to_shapefile(prediction,
-                                                           root_dir=os.path.dirname(
-                                                            section_file), projected=True)
+                        gdf = utilities.boxes_to_shapefile(
+                            prediction,
+                            root_dir=os.path.dirname(section_file),
+                            projected=True)
 
                         all_predictions.append(gdf)
 
@@ -167,8 +164,8 @@ def extract_training_data(vst_data,
     predictions_sorted = predictions.sort_values(by=['height', cp, 'stemDiameter'],
                                                  ascending=[False, False, False])
 
-    duplicates_mask = predictions_sorted.duplicated(subset=['xmin', 'ymin', 'xmax',
-                                                            'ymax'], keep='first')
+    duplicates_mask = predictions_sorted.duplicated(
+        subset=['xmin', 'ymin', 'xmax', 'ymax'], keep='first')
 
     clean_predictions = predictions_sorted[~duplicates_mask]
 
