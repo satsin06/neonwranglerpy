@@ -94,4 +94,3 @@ def predict_aop_data(vst_data,
                         all_predictions.append(prediction)
 
     return all_predictions
-
