@@ -42,8 +42,8 @@ def extract_training_data(vst_data,
     """
     retrieve_aop_data(vst_data, year, dpID, savepath)
     site_level_data = vst_data[vst_data.plotID.str.contains(site)]
-    get_tiles = ((site_level_data.easting / 1000).astype(int) * 1000).astype(str) + "_"
-    +((site_level_data.northing / 1000).astype(int) * 1000).astype(str)
+    get_tiles = (((site_level_data.easting / 1000).astype(int) * 1000).astype(str) + "_" +
+                 ((site_level_data.northing / 1000).astype(int) * 1000).astype(str))
     print("get_tiles")
     print(get_tiles.unique())
 
