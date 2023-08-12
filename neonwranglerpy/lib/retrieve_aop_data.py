@@ -63,11 +63,13 @@ def retrieve_aop_data(data, year=2019, dpID=['DP3.30006.001'], savepath=""):
             try:
                 if coords_for_tiles.easting.shape[0] > 1:
                     tile = tiles.iloc[i, :]
-                    siteID, tile_easting, tile_northing = tile['siteID'], tile['easting'],
-                    tile['northing']
+                    siteID = tile['siteID']
+                    tile_easting = tile['easting']
+                    tile_northing = tile['northing']
                 else:
-                    siteID, tile_easting, tile_northing = tiles['siteID'],
-                    tiles['easting'][0], tiles['northing'][0]
+                    siteID = tiles['siteID']
+                    tile_easting = tiles['easting'][0]
+                    tile_northing = tiles['northing'][0]
 
                 by_tile_aop(prd,
                             siteID,
