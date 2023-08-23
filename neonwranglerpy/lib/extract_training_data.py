@@ -113,7 +113,7 @@ def extract_training_data(vst_data,
 
     clean_predictions = predictions_sorted[~duplicates_mask]
 
-    destination_root = "/data/rgb"
+    # destination_root = "/data/rgb"
 
     for index, row in merged_data.iterrows():
         plant_status = row['plantStatus']
@@ -135,7 +135,7 @@ def extract_training_data(vst_data,
             # creates mask and clips raster
             out_img, out_meta = mask_raster(dat, bbox)
 
-            destination_folder = os.path.join(savepath, destination_root)
+            destination_folder = os.path.join(savepath, "data", "rgb")
             os.makedirs(destination_folder, exist_ok=True)
 
             new_image_path = os.path.join(destination_folder,
